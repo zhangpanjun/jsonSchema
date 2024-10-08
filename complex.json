@@ -1,0 +1,90 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id":"http://www.makinokun.cn/assets/schemas/complex.json",
+    "type": "object",
+    "title": "构建复杂模式schema",
+    "description": "此文件盛放构建复杂模式schema的一些配置项;",
+    "$comment": "$id,$ref,$anchor,$defs以及对应关键字如何使用实践",
+    "properties": {
+        "sendAddress":{
+            "$ref": "http://www.makinokun.cn/assets/schemas/address.json",
+            "$comment":"$ref引用$id,实现模式复用"
+        },
+        "receiveAddress":{
+            "$ref": "http://www.makinokun.cn/assets/schemas/address.json"
+        },
+        "JSONPointer":{
+            "$ref": "http://www.makinokun.cn/assets/schemas/address.json#/properties/JSONPointer",
+            "$comment":"$id+‘#/properties/某个属性’实现json指针式引用"
+        },
+        "outSourceAnchor":{
+            "$ref": "http://www.makinokun.cn/assets/schemas/address.json#anchorForOutSource",
+            "$comment":"$id + '#锚点name'实现锚点式外部引用模式"
+        },
+        "insideSourceAnchor":{
+            "type":"string",
+            "$anchor":"anchorForInsideSource",
+            "$comment":"定义锚点，锚点名称切不可使用'#' !"
+        },
+        "insideSourceAnchorDemo":{
+            "$ref": "#anchorForInsideSource",
+            "$comment":"直接 ‘#锚点name’实现锚点式内部引用模式"
+        },
+        "firstName":{
+            "$ref":"#/$defs/name",
+            "$comment":"#/$defs/属性可以  实现仅提供内部引用的  模式"
+        },
+        "lastName":{
+            "$ref":"#/$defs/name"
+        },
+        "age":{
+           "$ref":"#/$defs/other" 
+        },
+        "tree":{
+            "type":"object",
+            "properties":{
+                "name":{
+                    "type":"string"
+                },
+                "children":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#"
+                    }
+                }
+            },
+            "$comment":"$ref值为#时可以创建一个自我递归，适用于具有相同数据结构和key的tree树形结构"
+        },
+        "otherAddress":{
+            "$ref":"/schema/defsAddress",
+            "$comment":"$ref的值直接是文件中的$defs中的某个属性模式的id,即为捆绑模式。（如果把$defs中的address单独拆出去，则'/schema/defsAddress'地址不指向任何地址模式，所以为捆绑模式）"
+        }
+      
+    },
+    "$defs": {
+        "name":{
+            "type":"string",
+            "$comment":"此模式只用于本文件，则使用$defs"
+        },
+        "other":{
+            "type":"number"
+        },
+        "address":{
+            "$id":"/schema/defsAddress",
+            "$schema":"http://json-schema.org/draft-07/schema#",
+            "type":"object",
+            "properties":{
+                "city":{
+                    "type":"string"
+                },
+                "street":{
+                    "type":"number"
+                }
+            },
+            "dependencies":{
+                "city":["street"]
+            }
+        }
+    }
+
+}

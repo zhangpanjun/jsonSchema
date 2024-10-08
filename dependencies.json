@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id":"http://www.makinokun.cn/assets/schemas/dependencies.json",
+    "type": "object",
+    "title": "必要依赖与模式依赖schema",
+    "description": "此文件盛放必要依赖与模式依赖schema的一些配置项;",
+    "$comment": "当出现cities属性时必须出现country;但是反之则无需成对出现，如需实现双向关联绑定，则需要再反向写一遍;数组写法是必要依赖模式",
+    "properties": {
+        "cities":{
+            "type":"string"
+        },
+        "country":{
+            "type":"string"
+        },
+        "name":{
+            "type":"string"
+        }
+        
+    },
+    "dependencies":{
+        "cities":["country"],
+        "country": ["cities"],
+        "name":{
+            "properties": {
+                "age":{
+                    "type":"number"
+                }
+            },
+            "required": ["age"],
+            "$comment": "此对象写法为模式依赖，也是只正向依赖"
+        }
+    }
+}

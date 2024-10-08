@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id":"https://example.com/schemas/condition",
+    "type": "object",
+    "title": "条件语句关键字schema",
+    "description": "此文件盛放条件语句关键字schema的一些配置项;",
+    "$comment": "在外层直接写if.else,then不能兼顾到多个国家；使用allOf包裹就可实现~",
+    "properties": {
+        "cities":{
+            "type":"string"
+        },
+        "country":{
+            "type":"string"
+        },
+        "name":{
+            "type":"string"
+        },
+        "from":{
+            "type":"string"
+        }
+    },
+    "if":{
+        "properties": {"cities":{"const":"北京"}}
+    },
+    "then":{
+        "properties": {"country":{"const":"中国"}}
+    },
+    "else":{
+        "properties": {"country":{"const":"其他国家"}}
+    },
+    "allOf": [
+        {
+            "if":{
+                "properties": {"name":{"const":"习近平"}}
+            },
+            "then":{
+                "properties": {"from":{"const":"中国"}}
+            }
+        },
+        {
+            "if":{
+                "properties": {"name":{"const":"奥巴马"}}
+            },
+            "then":{
+                "properties": {"from":{"const":"美国"}}
+            }
+        }
+    ]
+}
